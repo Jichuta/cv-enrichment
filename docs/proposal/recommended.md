@@ -2,7 +2,7 @@
 
 ## Summary
 
-After analyzing your requirements and existing infrastructure (Databricks, ~400 employees, ~100 CVs reviews/month), here is my honest recommendation:
+After analyzing your requirements and existing infrastructure (Databricks, ~400 employees, ~100 CVs enrichment/month), here is a recommendation:
 
 > **The proposed architecture is feasible, but consider whether Databricks is the right tool for this specific job.**
 
@@ -40,8 +40,8 @@ After analyzing your requirements and existing infrastructure (Databricks, ~400 
 
 | Factor | Your Company | Typical Databricks Use Case |
 |--------|--------------|------------------------------|
-| Company size | 300 employees | Enterprise (1000+ employees) |
-| Hires/month | ~20 CVs | Data pipelines (millions of rows) |
+| Company size | 400 employees | Enterprise (1000+ employees) |
+| Hires/month | ~100 CVs | Data pipelines (millions of rows) |
 | Team skills | Generalists | Data Engineers |
 | Existing jobs | Many | Maybe few |
 
