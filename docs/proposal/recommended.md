@@ -1,8 +1,8 @@
 # CV Enrichment Service - Personal Recommendation
 
-## Executive Summary
+## Summary
 
-After analyzing your requirements and existing infrastructure (Databricks, ~300 employees, 20 hires/month), here is my honest recommendation:
+After analyzing your requirements and existing infrastructure (Databricks, ~400 employees, ~100 CVs reviews/month), here is my honest recommendation:
 
 > **The proposed architecture is feasible, but consider whether Databricks is the right tool for this specific job.**
 
