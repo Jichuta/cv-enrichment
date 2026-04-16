@@ -117,6 +117,42 @@ class LLMError(AppException):
         )
 
 
+class UnsupportedFileTypeError(AppException):
+    """File type is not supported for text extraction."""
+
+    def __init__(self, content_type: str, filename: str = "") -> None:
+        super().__init__(
+            message=f"Unsupported file type: '{content_type}'. Only PDF and DOCX are accepted.",
+            status_code=415,
+            error_code="unsupported_file_type",
+            details={"content_type": content_type, "filename": filename},
+        )
+
+
+class FileTooLargeError(AppException):
+    """Uploaded file exceeds the allowed size limit."""
+
+    def __init__(self, max_mb: int) -> None:
+        super().__init__(
+            message=f"File exceeds the maximum allowed size of {max_mb} MB.",
+            status_code=413,
+            error_code="file_too_large",
+            details={"max_size_mb": max_mb},
+        )
+
+
+class ExtractionError(AppException):
+    """Text could not be extracted from the uploaded file."""
+
+    def __init__(self, message: str, details: dict | None = None) -> None:
+        super().__init__(
+            message=message,
+            status_code=422,
+            error_code="extraction_error",
+            details=details,
+        )
+
+
 class OutputParseError(AppException):
     """Could not extract valid JSON from job/LLM output."""
 
