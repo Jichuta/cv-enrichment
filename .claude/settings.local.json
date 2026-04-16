@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -X POST http://localhost:8000/api/v1/cv/enrich -H 'Authorization: Bearer nksdbkafbhdlasdkjfbjlskgvshbjhfjh' -H 'Content-Type: application/json' -d '{ *)",
+      "Bash(curl -s -X POST http://localhost:8000/api/v1/cv/enrich -H 'Authorization: Bearer nksdbkafbhdlasdkjfbjlskgvshbjhfjh' -H 'Content-Type: application/json' -d @d:/assuresoft-repos/cv-enrichment/test_payload.json)",
+      "Bash(curl -s http://localhost:8000/api/v1/health)",
+      "Bash(d:/assuresoft-repos/cv-enrichment/.venv/Scripts/python --version)"
+    ]
+  }
+}
