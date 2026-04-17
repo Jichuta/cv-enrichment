@@ -10,9 +10,8 @@ Routes:
 
 import logging
 import time
-from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 
 from app.api.deps import ApiKey
 from app.schemas.enrich import (

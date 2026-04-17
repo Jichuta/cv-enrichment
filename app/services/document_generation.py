@@ -17,11 +17,12 @@ import logging
 from pathlib import Path
 
 from docx import Document
+from docx.document import Document as DocxDocument
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
-from docx.shared import Inches, Mm, Pt, RGBColor
+from docx.shared import Mm, Pt, RGBColor
 
 from app.core.exceptions import AppException
 from app.schemas.document import GenerateCVRequest, LanguageItem
@@ -60,7 +61,7 @@ def generate_pdf(data: GenerateCVRequest, template_name: str = "assuresoft") -> 
     """
     try:
         from jinja2 import Environment, FileSystemLoader
-        from weasyprint import HTML
+        from weasyprint import HTML  # type: ignore[import-not-found]
     except ImportError as exc:
         raise AppException(
             "PDF generation requires WeasyPrint. Install: pip install weasyprint",
@@ -114,8 +115,8 @@ def _build_template_context(data: GenerateCVRequest, template_dir: Path) -> dict
         "certifications": [e.model_dump() for e in data.certifications],
         "skills":         [s.model_dump() for s in data.skills],
         "languages":      [
-            {"name": l.name, "level": l.level, "dots": _level_dots(l)}
-            for l in data.languages
+            {"name": lang.name, "level": lang.level, "dots": _level_dots(lang)}
+            for lang in data.languages
         ],
         "logo_path": str(logo) if logo.exists() else None,
     }
@@ -123,7 +124,7 @@ def _build_template_context(data: GenerateCVRequest, template_dir: Path) -> dict
 
 # ── DOCX builder ──────────────────────────────────────────────────────────────
 
-def _build_docx(data: GenerateCVRequest, template_name: str = "assuresoft") -> Document:
+def _build_docx(data: GenerateCVRequest, template_name: str = "assuresoft") -> DocxDocument:
     doc = Document()
 
     # A4 page, 25mm left/right, 18mm top, 22mm bottom
@@ -169,7 +170,7 @@ def _build_docx(data: GenerateCVRequest, template_name: str = "assuresoft") -> D
 
 # ── Page header & footer ──────────────────────────────────────────────────────
 
-def _add_page_header(doc: Document, template_name: str = "assuresoft") -> None:
+def _add_page_header(doc: DocxDocument, template_name: str = "assuresoft") -> None:
     """Top right: logo image (if available) + horizontal rule."""
     header = doc.sections[0].header
     header.is_linked_to_previous = False
@@ -196,7 +197,7 @@ def _add_page_header(doc: Document, template_name: str = "assuresoft") -> None:
     _add_para_bottom_border(p, color="1A1A1A", size="6")
 
 
-def _add_page_footer(doc: Document) -> None:
+def _add_page_footer(doc: DocxDocument) -> None:
     """Bottom: www.assuresoft.com (left) | page number (right)."""
     footer = doc.sections[0].footer
     footer.is_linked_to_previous = False
@@ -241,7 +242,7 @@ def _add_page_footer(doc: Document) -> None:
 
 # ── Candidate name + position ─────────────────────────────────────────────────
 
-def _add_candidate_block(doc: Document, data: GenerateCVRequest) -> None:
+def _add_candidate_block(doc: DocxDocument, data: GenerateCVRequest) -> None:
     p_name = doc.add_paragraph()
     p_name.paragraph_format.space_before = Pt(6)
     p_name.paragraph_format.space_after  = Pt(2)
@@ -262,7 +263,7 @@ def _add_candidate_block(doc: Document, data: GenerateCVRequest) -> None:
 
 # ── Generic two-column section ────────────────────────────────────────────────
 
-def _add_section(doc: Document, label: str, fill_fn) -> None:
+def _add_section(doc: DocxDocument, label: str, fill_fn) -> None:
     """Create a two-column borderless table: label | content."""
     table = doc.add_table(rows=1, cols=2)
     _clear_table_borders(table)
@@ -332,28 +333,36 @@ def _fill_experience(cell, items) -> None:
         first = False
 
         r = p.add_run(exp.company)
-        r.font.name = "Arial"; r.font.size = Pt(10.5)
-        r.font.bold = True; r.font.color.rgb = BLACK
+        r.font.name = "Arial"
+        r.font.size = Pt(10.5)
+        r.font.bold = True
+        r.font.color.rgb = BLACK
 
         if exp.position:
             p2 = cell.add_paragraph()
             p2.paragraph_format.space_after = Pt(0)
             r2 = p2.add_run(exp.position)
-            r2.font.name = "Arial"; r2.font.size = Pt(10)
-            r2.font.bold = True; r2.font.color.rgb = BLACK
+            r2.font.name = "Arial"
+            r2.font.size = Pt(10)
+            r2.font.bold = True
+            r2.font.color.rgb = BLACK
 
         p3 = cell.add_paragraph()
         p3.paragraph_format.space_after = Pt(4)
         r3 = p3.add_run(exp.period)
-        r3.font.name = "Arial"; r3.font.size = Pt(10)
-        r3.font.italic = True; r3.font.color.rgb = GRAY
+        r3.font.name = "Arial"
+        r3.font.size = Pt(10)
+        r3.font.italic = True
+        r3.font.color.rgb = GRAY
 
         if exp.summary:
             p4 = cell.add_paragraph()
             p4.paragraph_format.space_after = Pt(3)
             p4.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
             r4 = p4.add_run(exp.summary)
-            r4.font.name = "Arial"; r4.font.size = Pt(10); r4.font.color.rgb = BLACK
+            r4.font.name = "Arial"
+            r4.font.size = Pt(10)
+            r4.font.color.rgb = BLACK
 
         for ach in exp.achievements:
             _add_bullet(cell, ach)
@@ -367,14 +376,18 @@ def _fill_education(cell, items) -> None:
         p.paragraph_format.space_after  = Pt(1)
         first = False
         r = p.add_run(edu.degree)
-        r.font.name = "Arial"; r.font.size = Pt(10)
-        r.font.bold = True; r.font.color.rgb = BLACK
+        r.font.name = "Arial"
+        r.font.size = Pt(10)
+        r.font.bold = True
+        r.font.color.rgb = BLACK
 
         p2 = cell.add_paragraph()
         p2.paragraph_format.space_after = Pt(0)
         r2 = p2.add_run(f"{edu.location}  |  {edu.year}")
-        r2.font.name = "Arial"; r2.font.size = Pt(10)
-        r2.font.italic = True; r2.font.color.rgb = GRAY
+        r2.font.name = "Arial"
+        r2.font.size = Pt(10)
+        r2.font.italic = True
+        r2.font.color.rgb = GRAY
 
 
 def _fill_certifications(cell, items) -> None:
@@ -390,12 +403,16 @@ def _fill_skills(cell, categories) -> None:
         p.paragraph_format.left_indent  = Mm(0)
 
         bullet = p.add_run("●  ")
-        bullet.font.name = "Arial"; bullet.font.size = Pt(8)
-        bullet.font.bold = True; bullet.font.color.rgb = BLUE
+        bullet.font.name = "Arial"
+        bullet.font.size = Pt(8)
+        bullet.font.bold = True
+        bullet.font.color.rgb = BLUE
 
         label = p.add_run(f"{cat.area}:")
-        label.font.name = "Arial"; label.font.size = Pt(10)
-        label.font.bold = True; label.font.color.rgb = BLACK
+        label.font.name = "Arial"
+        label.font.size = Pt(10)
+        label.font.bold = True
+        label.font.color.rgb = BLACK
 
         for item in cat.items:
             pi = cell.add_paragraph()
@@ -403,11 +420,14 @@ def _fill_skills(cell, categories) -> None:
             pi.paragraph_format.space_after = Pt(1)
 
             sub = pi.add_run("○  ")
-            sub.font.name = "Arial"; sub.font.size = Pt(8)
+            sub.font.name = "Arial"
+            sub.font.size = Pt(8)
             sub.font.color.rgb = GRAY
 
             ri = pi.add_run(item)
-            ri.font.name = "Arial"; ri.font.size = Pt(10); ri.font.color.rgb = BLACK
+            ri.font.name = "Arial"
+            ri.font.size = Pt(10)
+            ri.font.color.rgb = BLACK
 
 
 def _fill_languages(cell, items) -> None:
@@ -423,11 +443,15 @@ def _add_bullet(cell, text: str) -> None:
     p.paragraph_format.left_indent  = Mm(0)
 
     dot = p.add_run("●  ")
-    dot.font.name = "Arial"; dot.font.size = Pt(8)
-    dot.font.bold = True; dot.font.color.rgb = BLUE
+    dot.font.name = "Arial"
+    dot.font.size = Pt(8)
+    dot.font.bold = True
+    dot.font.color.rgb = BLUE
 
     r = p.add_run(text)
-    r.font.name = "Arial"; r.font.size = Pt(10); r.font.color.rgb = BLACK
+    r.font.name = "Arial"
+    r.font.size = Pt(10)
+    r.font.color.rgb = BLACK
 
 
 def _clear_table_borders(table) -> None:
