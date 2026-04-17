@@ -4,7 +4,7 @@ on:
   workflow_run:
     workflows: [Docker Build & Push]
     types: [completed]
-    branches: [main]
+    branches: [release/*]
   workflow_dispatch:
     inputs:
       image_tag:
