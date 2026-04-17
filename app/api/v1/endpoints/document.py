@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 _DOCX_MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-_PDF_MIME   = "application/pdf"
+_PDF_MIME = "application/pdf"
 
 
 @router.post(
@@ -36,7 +36,7 @@ _PDF_MIME   = "application/pdf"
         200: {
             "content": {
                 _DOCX_MIME: {"schema": {"type": "string", "format": "binary"}},
-                _PDF_MIME:  {"schema": {"type": "string", "format": "binary"}},
+                _PDF_MIME: {"schema": {"type": "string", "format": "binary"}},
             },
             "description": "Formatted CV file",
         }
@@ -45,20 +45,23 @@ _PDF_MIME   = "application/pdf"
 async def generate_cv_document(
     payload: GenerateCVRequest,
     _: ApiKey,
-    template: str = Query(default="assuresoft", description="Template name (subfolder under templates/). Options: assuresoft, assuresoft-internal"),
-    format: str   = Query(default="docx", description="Output format: 'docx' or 'pdf'"),
+    template: str = Query(
+        default="assuresoft",
+        description="Template name (subfolder under templates/). Options: assuresoft, assuresoft-internal",
+    ),
+    format: str = Query(default="docx", description="Output format: 'docx' or 'pdf'"),
 ) -> Response:
     safe_name = payload.candidate_name.lower().replace(" ", "_")
     fmt = format.lower()
 
     if fmt == "pdf":
-        content   = generate_pdf(payload, template)
-        mime      = _PDF_MIME
-        filename  = f"{safe_name}_cv.pdf"
+        content = generate_pdf(payload, template)
+        mime = _PDF_MIME
+        filename = f"{safe_name}_cv.pdf"
     else:
-        content   = generate_docx(payload, template)
-        mime      = _DOCX_MIME
-        filename  = f"{safe_name}_cv.docx"
+        content = generate_docx(payload, template)
+        mime = _DOCX_MIME
+        filename = f"{safe_name}_cv.docx"
 
     logger.info(
         "Document generated: candidate=%s template=%s format=%s size_kb=%d",

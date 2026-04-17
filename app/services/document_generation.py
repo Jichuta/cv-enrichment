@@ -32,24 +32,27 @@ logger = logging.getLogger(__name__)
 TEMPLATES_DIR = Path(__file__).parent.parent.parent / "templates"
 
 # ── Brand colours (AssureSoft palette) ───────────────────────────────────────
-BLUE  = RGBColor(0x1A, 0x6C, 0xE8)   # section labels, position, bullets
-BLACK = RGBColor(0x1A, 0x1A, 0x1A)   # body text, candidate name
-GRAY  = RGBColor(0x33, 0x33, 0x33)   # period, italic meta
-LGRAY = RGBColor(0xCC, 0xCC, 0xCC)   # divider lines
+BLUE = RGBColor(0x1A, 0x6C, 0xE8)  # section labels, position, bullets
+BLACK = RGBColor(0x1A, 0x1A, 0x1A)  # body text, candidate name
+GRAY = RGBColor(0x33, 0x33, 0x33)  # period, italic meta
+LGRAY = RGBColor(0xCC, 0xCC, 0xCC)  # divider lines
 
 # ── Column widths (A4 content = 160mm with 25mm margins each side) ────────────
-LABEL_COL_MM   = 33   # ~21 %
+LABEL_COL_MM = 33  # ~21 %
 CONTENT_COL_MM = 127  # ~79 %
 
 
 # ── Public API ─────────────────────────────────────────────────────────────────
+
 
 def generate_docx(data: GenerateCVRequest, template_name: str = "assuresoft") -> bytes:
     _validate_template(template_name)
     doc = _build_docx(data, template_name)
     buf = io.BytesIO()
     doc.save(buf)
-    logger.info("DOCX generated: candidate=%s template=%s", data.candidate_name, template_name)
+    logger.info(
+        "DOCX generated: candidate=%s template=%s", data.candidate_name, template_name
+    )
     return buf.getvalue()
 
 
@@ -77,11 +80,14 @@ def generate_pdf(data: GenerateCVRequest, template_name: str = "assuresoft") -> 
     html_content = template.render(**_build_template_context(data, template_dir))
 
     pdf_bytes = HTML(string=html_content, base_url=str(template_dir)).write_pdf()
-    logger.info("PDF generated: candidate=%s template=%s", data.candidate_name, template_name)
+    logger.info(
+        "PDF generated: candidate=%s template=%s", data.candidate_name, template_name
+    )
     return pdf_bytes
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
+
 
 def _validate_template(name: str) -> None:
     path = TEMPLATES_DIR / name
@@ -107,14 +113,14 @@ def _build_template_context(data: GenerateCVRequest, template_dir: Path) -> dict
     logo = template_dir / "logo-assuresoft.png"
     return {
         "candidate_name": data.candidate_name,
-        "position":       data.position,
-        "availability":   data.availability,
-        "summary":        data.summary,
-        "experience":     [e.model_dump() for e in data.experience],
-        "education":      [e.model_dump() for e in data.education],
+        "position": data.position,
+        "availability": data.availability,
+        "summary": data.summary,
+        "experience": [e.model_dump() for e in data.experience],
+        "education": [e.model_dump() for e in data.education],
         "certifications": [e.model_dump() for e in data.certifications],
-        "skills":         [s.model_dump() for s in data.skills],
-        "languages":      [
+        "skills": [s.model_dump() for s in data.skills],
+        "languages": [
             {"name": lang.name, "level": lang.level, "dots": _level_dots(lang)}
             for lang in data.languages
         ],
@@ -124,17 +130,20 @@ def _build_template_context(data: GenerateCVRequest, template_dir: Path) -> dict
 
 # ── DOCX builder ──────────────────────────────────────────────────────────────
 
-def _build_docx(data: GenerateCVRequest, template_name: str = "assuresoft") -> DocxDocument:
+
+def _build_docx(
+    data: GenerateCVRequest, template_name: str = "assuresoft"
+) -> DocxDocument:
     doc = Document()
 
     # A4 page, 25mm left/right, 18mm top, 22mm bottom
     for sec in doc.sections:
-        sec.page_width    = Mm(210)
-        sec.page_height   = Mm(297)
-        sec.top_margin    = Mm(18)
+        sec.page_width = Mm(210)
+        sec.page_height = Mm(297)
+        sec.top_margin = Mm(18)
         sec.bottom_margin = Mm(22)
-        sec.left_margin   = Mm(25)
-        sec.right_margin  = Mm(25)
+        sec.left_margin = Mm(25)
+        sec.right_margin = Mm(25)
 
     # Global Normal style
     normal = doc.styles["Normal"]
@@ -142,33 +151,40 @@ def _build_docx(data: GenerateCVRequest, template_name: str = "assuresoft") -> D
     normal.font.size = Pt(10)
     normal.font.color.rgb = BLACK
     normal.paragraph_format.space_before = Pt(0)
-    normal.paragraph_format.space_after  = Pt(0)
+    normal.paragraph_format.space_after = Pt(0)
 
     _add_page_header(doc, template_name)
     _add_page_footer(doc)
     _add_candidate_block(doc, data)
-    _add_section(doc, "Availability",    lambda c: _fill_availability(c, data.availability))
-    _add_section(doc, "Summary",         lambda c: _fill_summary(c, data.summary))
+    _add_section(
+        doc, "Availability", lambda c: _fill_availability(c, data.availability)
+    )
+    _add_section(doc, "Summary", lambda c: _fill_summary(c, data.summary))
 
     if data.experience:
-        _add_section(doc, "Experience",  lambda c: _fill_experience(c, data.experience))
+        _add_section(doc, "Experience", lambda c: _fill_experience(c, data.experience))
 
     if data.education:
-        _add_section(doc, "Education",   lambda c: _fill_education(c, data.education))
+        _add_section(doc, "Education", lambda c: _fill_education(c, data.education))
 
     if data.certifications:
-        _add_section(doc, "Certifications", lambda c: _fill_certifications(c, data.certifications))
+        _add_section(
+            doc,
+            "Certifications",
+            lambda c: _fill_certifications(c, data.certifications),
+        )
 
     if data.skills:
-        _add_section(doc, "Skills",      lambda c: _fill_skills(c, data.skills))
+        _add_section(doc, "Skills", lambda c: _fill_skills(c, data.skills))
 
     if data.languages:
-        _add_section(doc, "Languages",   lambda c: _fill_languages(c, data.languages))
+        _add_section(doc, "Languages", lambda c: _fill_languages(c, data.languages))
 
     return doc
 
 
 # ── Page header & footer ──────────────────────────────────────────────────────
+
 
 def _add_page_header(doc: DocxDocument, template_name: str = "assuresoft") -> None:
     """Top right: logo image (if available) + horizontal rule."""
@@ -188,10 +204,10 @@ def _add_page_header(doc: DocxDocument, template_name: str = "assuresoft") -> No
         run.add_picture(str(logo_path), height=Mm(8))
     else:
         # Fallback text when logo file is not present yet
-        r = p.add_run("\u276Fassuresoft")
-        r.font.name  = "Arial"
-        r.font.size  = Pt(11)
-        r.font.bold  = True
+        r = p.add_run("\u276fassuresoft")
+        r.font.name = "Arial"
+        r.font.size = Pt(11)
+        r.font.bold = True
         r.font.color.rgb = BLUE
 
     _add_para_bottom_border(p, color="1A1A1A", size="6")
@@ -213,8 +229,8 @@ def _add_page_footer(doc: DocxDocument) -> None:
     p.paragraph_format.tab_stops.add_tab_stop(Mm(160), WD_ALIGN_PARAGRAPH.RIGHT)
 
     r1 = p.add_run("www.assuresoft.com")
-    r1.font.name  = "Arial"
-    r1.font.size  = Pt(8.5)
+    r1.font.name = "Arial"
+    r1.font.size = Pt(8.5)
     r1.font.color.rgb = BLUE
     r1.font.underline = True
 
@@ -222,8 +238,8 @@ def _add_page_footer(doc: DocxDocument) -> None:
 
     # Page number field
     r2 = p.add_run()
-    r2.font.name  = "Arial"
-    r2.font.size  = Pt(8.5)
+    r2.font.name = "Arial"
+    r2.font.size = Pt(8.5)
     r2.font.color.rgb = BLACK
     fld = OxmlElement("w:fldChar")
     fld.set(qn("w:fldCharType"), "begin")
@@ -242,26 +258,28 @@ def _add_page_footer(doc: DocxDocument) -> None:
 
 # ── Candidate name + position ─────────────────────────────────────────────────
 
+
 def _add_candidate_block(doc: DocxDocument, data: GenerateCVRequest) -> None:
     p_name = doc.add_paragraph()
     p_name.paragraph_format.space_before = Pt(6)
-    p_name.paragraph_format.space_after  = Pt(2)
+    p_name.paragraph_format.space_after = Pt(2)
     r = p_name.add_run(data.candidate_name)
-    r.font.name  = "Arial"
-    r.font.size  = Pt(24)
-    r.font.bold  = True
+    r.font.name = "Arial"
+    r.font.size = Pt(24)
+    r.font.bold = True
     r.font.color.rgb = BLACK
 
     p_pos = doc.add_paragraph()
     p_pos.paragraph_format.space_after = Pt(14)
     r2 = p_pos.add_run(data.position)
-    r2.font.name  = "Arial"
-    r2.font.size  = Pt(13)
-    r2.font.bold  = True
+    r2.font.name = "Arial"
+    r2.font.size = Pt(13)
+    r2.font.bold = True
     r2.font.color.rgb = BLUE
 
 
 # ── Generic two-column section ────────────────────────────────────────────────
+
 
 def _add_section(doc: DocxDocument, label: str, fill_fn) -> None:
     """Create a two-column borderless table: label | content."""
@@ -273,16 +291,16 @@ def _add_section(doc: DocxDocument, label: str, fill_fn) -> None:
     table.columns[1].width = Mm(CONTENT_COL_MM)
 
     # Left cell — blue label
-    left  = table.cell(0, 0)
+    left = table.cell(0, 0)
     left.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.TOP
     _clear_cell_borders(left)
 
     lp = left.paragraphs[0]
     lp.paragraph_format.space_before = Pt(10)
     r = lp.add_run(label)
-    r.font.name  = "Arial"
-    r.font.size  = Pt(11)
-    r.font.bold  = True
+    r.font.name = "Arial"
+    r.font.size = Pt(11)
+    r.font.bold = True
     r.font.color.rgb = BLUE
 
     # Right cell — top rule + content
@@ -302,10 +320,11 @@ def _add_section(doc: DocxDocument, label: str, fill_fn) -> None:
 
 # ── Section content fillers ───────────────────────────────────────────────────
 
+
 def _fill_availability(cell, text: str) -> None:
     p = cell.add_paragraph()
     p.paragraph_format.space_before = Pt(8)
-    p.paragraph_format.space_after  = Pt(0)
+    p.paragraph_format.space_after = Pt(0)
     r = p.add_run(text)
     r.font.name = "Arial"
     r.font.size = Pt(10)
@@ -316,11 +335,11 @@ def _fill_availability(cell, text: str) -> None:
 def _fill_summary(cell, text: str) -> None:
     p = cell.add_paragraph()
     p.paragraph_format.space_before = Pt(8)
-    p.paragraph_format.space_after  = Pt(0)
+    p.paragraph_format.space_after = Pt(0)
     p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
     r = p.add_run(text)
-    r.font.name  = "Arial"
-    r.font.size  = Pt(10)
+    r.font.name = "Arial"
+    r.font.size = Pt(10)
     r.font.color.rgb = BLACK
 
 
@@ -329,7 +348,7 @@ def _fill_experience(cell, items) -> None:
     for exp in items:
         p = cell.add_paragraph()
         p.paragraph_format.space_before = Pt(0) if first else Pt(10)
-        p.paragraph_format.space_after  = Pt(0)
+        p.paragraph_format.space_after = Pt(0)
         first = False
 
         r = p.add_run(exp.company)
@@ -373,7 +392,7 @@ def _fill_education(cell, items) -> None:
     for edu in items:
         p = cell.add_paragraph()
         p.paragraph_format.space_before = Pt(0) if first else Pt(6)
-        p.paragraph_format.space_after  = Pt(1)
+        p.paragraph_format.space_after = Pt(1)
         first = False
         r = p.add_run(edu.degree)
         r.font.name = "Arial"
@@ -399,8 +418,8 @@ def _fill_skills(cell, categories) -> None:
     for cat in categories:
         p = cell.add_paragraph()
         p.paragraph_format.space_before = Pt(0)
-        p.paragraph_format.space_after  = Pt(1)
-        p.paragraph_format.left_indent  = Mm(0)
+        p.paragraph_format.space_after = Pt(1)
+        p.paragraph_format.left_indent = Mm(0)
 
         bullet = p.add_run("●  ")
         bullet.font.name = "Arial"
@@ -437,10 +456,11 @@ def _fill_languages(cell, items) -> None:
 
 # ── Low-level XML helpers ─────────────────────────────────────────────────────
 
+
 def _add_bullet(cell, text: str) -> None:
     p = cell.add_paragraph()
-    p.paragraph_format.space_after  = Pt(2)
-    p.paragraph_format.left_indent  = Mm(0)
+    p.paragraph_format.space_after = Pt(2)
+    p.paragraph_format.left_indent = Mm(0)
 
     dot = p.add_run("●  ")
     dot.font.name = "Arial"
@@ -455,13 +475,13 @@ def _add_bullet(cell, text: str) -> None:
 
 
 def _clear_table_borders(table) -> None:
-    tbl  = table._tbl
+    tbl = table._tbl
     tblPr = tbl.tblPr if tbl.tblPr is not None else OxmlElement("w:tblPr")
-    bdr  = OxmlElement("w:tblBorders")
+    bdr = OxmlElement("w:tblBorders")
     for side in ("top", "start", "bottom", "end", "insideH", "insideV"):
         el = OxmlElement(f"w:{side}")
         el.set(qn("w:val"), "none")
-        el.set(qn("w:sz"),  "0")
+        el.set(qn("w:sz"), "0")
         el.set(qn("w:space"), "0")
         el.set(qn("w:color"), "auto")
         bdr.append(el)
@@ -469,9 +489,9 @@ def _clear_table_borders(table) -> None:
 
 
 def _clear_cell_borders(cell) -> None:
-    tc    = cell._tc
-    tcPr  = tc.get_or_add_tcPr()
-    bdr   = OxmlElement("w:tcBorders")
+    tc = cell._tc
+    tcPr = tc.get_or_add_tcPr()
+    bdr = OxmlElement("w:tcBorders")
     for side in ("top", "start", "bottom", "end"):
         el = OxmlElement(f"w:{side}")
         el.set(qn("w:val"), "none")
@@ -480,13 +500,13 @@ def _clear_cell_borders(cell) -> None:
 
 
 def _set_cell_top_border(cell, color: str = "CCCCCC", size: str = "4") -> None:
-    tc   = cell._tc
+    tc = cell._tc
     tcPr = tc.get_or_add_tcPr()
-    bdr  = OxmlElement("w:tcBorders")
+    bdr = OxmlElement("w:tcBorders")
 
     top = OxmlElement("w:top")
-    top.set(qn("w:val"),   "single")
-    top.set(qn("w:sz"),    size)
+    top.set(qn("w:val"), "single")
+    top.set(qn("w:sz"), size)
     top.set(qn("w:space"), "0")
     top.set(qn("w:color"), color)
     bdr.append(top)
@@ -500,11 +520,11 @@ def _set_cell_top_border(cell, color: str = "CCCCCC", size: str = "4") -> None:
 
 
 def _add_para_bottom_border(p, color: str = "1A1A1A", size: str = "6") -> None:
-    pPr  = p._p.get_or_add_pPr()
+    pPr = p._p.get_or_add_pPr()
     pBdr = OxmlElement("w:pBdr")
-    bot  = OxmlElement("w:bottom")
-    bot.set(qn("w:val"),   "single")
-    bot.set(qn("w:sz"),    size)
+    bot = OxmlElement("w:bottom")
+    bot.set(qn("w:val"), "single")
+    bot.set(qn("w:sz"), size)
     bot.set(qn("w:space"), "1")
     bot.set(qn("w:color"), color)
     pBdr.append(bot)
@@ -512,11 +532,11 @@ def _add_para_bottom_border(p, color: str = "1A1A1A", size: str = "6") -> None:
 
 
 def _add_para_top_border(p, color: str = "1A1A1A", size: str = "6") -> None:
-    pPr  = p._p.get_or_add_pPr()
+    pPr = p._p.get_or_add_pPr()
     pBdr = OxmlElement("w:pBdr")
-    top  = OxmlElement("w:top")
-    top.set(qn("w:val"),   "single")
-    top.set(qn("w:sz"),    size)
+    top = OxmlElement("w:top")
+    top.set(qn("w:val"), "single")
+    top.set(qn("w:sz"), size)
     top.set(qn("w:space"), "1")
     top.set(qn("w:color"), color)
     pBdr.append(top)

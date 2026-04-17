@@ -60,7 +60,9 @@ def create_app() -> FastAPI:
     # ── Exception Handlers ─────────────────────────────────────────────────────
 
     @app.exception_handler(AppException)
-    async def app_exception_handler(request: Request, exc: AppException) -> JSONResponse:
+    async def app_exception_handler(
+        request: Request, exc: AppException
+    ) -> JSONResponse:
         request_id = getattr(request.state, "request_id", None)
         return JSONResponse(
             status_code=exc.status_code,
@@ -92,9 +94,13 @@ def create_app() -> FastAPI:
         )
 
     @app.exception_handler(Exception)
-    async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    async def unhandled_exception_handler(
+        request: Request, exc: Exception
+    ) -> JSONResponse:
         request_id = getattr(request.state, "request_id", None)
-        logger.exception("Unhandled exception on %s %s", request.method, request.url.path)
+        logger.exception(
+            "Unhandled exception on %s %s", request.method, request.url.path
+        )
         return JSONResponse(
             status_code=500,
             content=ErrorResponse(

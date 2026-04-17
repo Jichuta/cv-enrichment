@@ -17,12 +17,15 @@ _CAMEL_CONFIG = ConfigDict(populate_by_name=True)
 
 # ── Sub-models ────────────────────────────────────────────────────────────────
 
+
 class JobDescription(BaseModel):
     model_config = _CAMEL_CONFIG
 
     id: str = Field(default="", description="Job description identifier")
     title: str = Field(..., description="Job title, e.g. 'Senior Python Developer'")
-    requirements: list[str] = Field(default=[], description="Required skills/qualifications")
+    requirements: list[str] = Field(
+        default=[], description="Required skills/qualifications"
+    )
     responsibilities: list[str] = Field(default=[], description="Key responsibilities")
     nice_to_have: list[str] = Field(
         default=[], alias="niceToHave", description="Optional/preferred skills"
@@ -32,7 +35,9 @@ class JobDescription(BaseModel):
 class GreenhouseCandidate(BaseModel):
     model_config = _CAMEL_CONFIG
 
-    candidate_id: str = Field(alias="candidateId", description="Greenhouse candidate ID")
+    candidate_id: str = Field(
+        alias="candidateId", description="Greenhouse candidate ID"
+    )
     first_name: str = Field(alias="firstName")
     last_name: str = Field(alias="lastName")
     email: str = ""
@@ -48,13 +53,16 @@ class GreenhouseCandidate(BaseModel):
 class CvExtracted(BaseModel):
     model_config = _CAMEL_CONFIG
 
-    raw_text: str = Field(default="", alias="rawText", description="Full extracted CV text")
+    raw_text: str = Field(
+        default="", alias="rawText", description="Full extracted CV text"
+    )
     structured: dict[str, Any] = Field(
         default={}, description="Pre-structured fields (skills, certifications, etc.)"
     )
 
 
 # ── Request Models ────────────────────────────────────────────────────────────
+
 
 class EnrichCVRequest(BaseModel):
     """
@@ -85,17 +93,22 @@ class DirectEnrichRequest(BaseModel):
     job_requirements: list[str] = Field(
         default=[], description="Required skills for the position"
     )
-    candidate_name: str = Field(default="", description="Candidate full name (optional)")
+    candidate_name: str = Field(
+        default="", description="Candidate full name (optional)"
+    )
 
 
 # ── Response Models ───────────────────────────────────────────────────────────
+
 
 class EnrichCVAsyncResponse(BaseModel):
     """Returned immediately after triggering an async enrichment job."""
 
     run_id: int
     status: str = "started"
-    message: str = "CV enrichment job triggered. Poll /cv/runs/{run_id}/status to track progress."
+    message: str = (
+        "CV enrichment job triggered. Poll /cv/runs/{run_id}/status to track progress."
+    )
 
 
 class EnrichCVSyncResponse(BaseModel):
@@ -115,7 +128,8 @@ class JobStatusResponse(BaseModel):
         description="PENDING | RUNNING | TERMINATING | TERMINATED | SKIPPED | INTERNAL_ERROR"
     )
     result_state: str | None = Field(
-        default=None, description="SUCCESS | FAILED | TIMEDOUT | CANCELED (only when terminated)"
+        default=None,
+        description="SUCCESS | FAILED | TIMEDOUT | CANCELED (only when terminated)",
     )
     state_message: str = ""
     is_complete: bool = False

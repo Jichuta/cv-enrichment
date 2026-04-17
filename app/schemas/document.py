@@ -27,6 +27,7 @@ class CertificationItem(BaseModel):
 
 class SkillCategory(BaseModel):
     """A named group of skills, e.g. { area: 'Programming Languages', items: ['Python', 'Node.js'] }"""
+
     area: str
     items: list[str] = []
 

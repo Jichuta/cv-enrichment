@@ -29,7 +29,9 @@ MAX_FILE_SIZE_MB = 10
 MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
 
 
-def extract_text(file_bytes: bytes, filename: str, content_type: str) -> TextExtractionResponse:
+def extract_text(
+    file_bytes: bytes, filename: str, content_type: str
+) -> TextExtractionResponse:
     """Extract plain text from a PDF or DOCX file.
 
     Args:
@@ -80,7 +82,9 @@ def _extract_pdf(file_bytes: bytes, filename: str) -> TextExtractionResponse:
             "The PDF may be image-based (scanned) and requires OCR."
         )
 
-    logger.info("PDF extracted: file=%s pages=%d chars=%d", filename, len(pages), len(raw_text))
+    logger.info(
+        "PDF extracted: file=%s pages=%d chars=%d", filename, len(pages), len(raw_text)
+    )
     return _build_response(filename, "pdf", raw_text, len(pages))
 
 

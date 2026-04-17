@@ -68,7 +68,9 @@ class DatabricksJobsClient:
                     details={"body": exc.response.text[:500]},
                 ) from exc
             except httpx.RequestError as exc:
-                raise DatabricksError(f"Network error triggering job {job_id}: {exc}") from exc
+                raise DatabricksError(
+                    f"Network error triggering job {job_id}: {exc}"
+                ) from exc
 
         run_id: int = response.json()["run_id"]
         logger.info("Triggered job_id=%s → run_id=%s", job_id, run_id)
@@ -89,7 +91,9 @@ class DatabricksJobsClient:
                     details={"body": exc.response.text[:500]},
                 ) from exc
             except httpx.RequestError as exc:
-                raise DatabricksError(f"Network error fetching run {run_id}: {exc}") from exc
+                raise DatabricksError(
+                    f"Network error fetching run {run_id}: {exc}"
+                ) from exc
 
         state = response.json().get("state", {})
         return {
@@ -113,7 +117,9 @@ class DatabricksJobsClient:
                     details={"body": exc.response.text[:500]},
                 ) from exc
             except httpx.RequestError as exc:
-                raise DatabricksError(f"Network error fetching output for run {run_id}: {exc}") from exc
+                raise DatabricksError(
+                    f"Network error fetching output for run {run_id}: {exc}"
+                ) from exc
 
         return response.json()
 
@@ -168,11 +174,15 @@ class DatabricksJobsClient:
             OutputParseError:         If the logs contain no parseable JSON.
         """
         run_id = await self.trigger_job(job_id, python_params)
-        final_status = await self.wait_for_completion(run_id, poll_interval, timeout_secs)
+        final_status = await self.wait_for_completion(
+            run_id, poll_interval, timeout_secs
+        )
 
         result_state = final_status.get("result_state")
         if result_state != "SUCCESS":
-            raise DatabricksJobFailedError(run_id, final_status.get("state_message", ""))
+            raise DatabricksJobFailedError(
+                run_id, final_status.get("state_message", "")
+            )
 
         output = await self.get_run_output(run_id)
         logs: str = output.get("logs", "")

@@ -37,7 +37,9 @@ router = APIRouter()
 )
 async def extract_cv_text(
     _: ApiKey,
-    file: UploadFile = File(..., description="CV file to extract text from (.pdf or .docx)"),
+    file: UploadFile = File(
+        ..., description="CV file to extract text from (.pdf or .docx)"
+    ),
 ) -> TextExtractionResponse:
     # Validate content type
     if file.content_type not in SUPPORTED_TYPES:
