@@ -1,7 +1,7 @@
 """Databricks Jobs REST API 2.0 client.
 
 Handles:
-  - Triggering a job run (with optional jar_params)
+  - Triggering a job run (with optional python_params)
   - Polling until the run reaches a terminal state
   - Fetching and parsing the run output (logs)
 
@@ -51,12 +51,12 @@ class DatabricksJobsClient:
     async def trigger_job(
         self,
         job_id: int,
-        jar_params: list[str] | None = None,
+        python_params: list[str] | None = None,
     ) -> int:
         """Trigger a Databricks job run and return the run_id."""
         payload: dict[str, Any] = {"job_id": job_id}
-        if jar_params:
-            payload["jar_params"] = jar_params
+        if python_params:
+            payload["python_params"] = python_params
 
         async with self._client() as client:
             try:
@@ -155,7 +155,7 @@ class DatabricksJobsClient:
     async def trigger_and_wait(
         self,
         job_id: int,
-        jar_params: list[str] | None = None,
+        python_params: list[str] | None = None,
         poll_interval: int | None = None,
         timeout_secs: int | None = None,
     ) -> dict[str, Any]:
@@ -167,7 +167,7 @@ class DatabricksJobsClient:
             DatabricksTimeoutError:   If the job doesn't finish within timeout_secs.
             OutputParseError:         If the logs contain no parseable JSON.
         """
-        run_id = await self.trigger_job(job_id, jar_params)
+        run_id = await self.trigger_job(job_id, python_params)
         final_status = await self.wait_for_completion(run_id, poll_interval, timeout_secs)
 
         result_state = final_status.get("result_state")

@@ -41,14 +41,14 @@ class EnrichmentService:
 
         # Serialize the full payload as a single JSON string passed via --input_data
         input_data = request.model_dump(by_alias=True)
-        jar_params = ["--input_data", json.dumps(input_data)]
+        python_params = ["--input_data", json.dumps(input_data)]
 
         logger.info(
             "Async trigger — job_id=%s candidate_id=%s",
             effective_job_id,
             candidate_id,
         )
-        return await databricks_jobs.trigger_job(effective_job_id, jar_params)
+        return await databricks_jobs.trigger_job(effective_job_id, python_params)
 
     async def enrich_via_job(
         self,
@@ -68,14 +68,14 @@ class EnrichmentService:
         candidate_id = request.greenhouse_parse_data.candidate_id
 
         input_data = request.model_dump(by_alias=True)
-        jar_params = ["--input_data", json.dumps(input_data)]
+        python_params = ["--input_data", json.dumps(input_data)]
 
         logger.info(
             "Sync enrichment — job_id=%s candidate_id=%s",
             effective_job_id,
             candidate_id,
         )
-        return await databricks_jobs.trigger_and_wait(effective_job_id, jar_params)
+        return await databricks_jobs.trigger_and_wait(effective_job_id, python_params)
 
     # ── Status / Result Polling ───────────────────────────────────────────────
 

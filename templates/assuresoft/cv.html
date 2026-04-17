@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    /* ── Page setup ────────────────────────────────────────────────────────── */
+    @page {
+      size: A4;
+      margin: 18mm 25mm 22mm 25mm;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10pt;
+      color: #1A1A1A;
+      line-height: 1.5;
+    }
+
+    /* ── Top header: "Selected by assuresoft" ──────────────────────────────── */
+    .top-bar {
+      text-align: right;
+      margin-bottom: 8px;
+    }
+
+    .brand-name {
+      font-size: 11pt;
+      font-weight: bold;
+      color: #1A6CE8;
+    }
+
+    /* Logo — swap src when available, placeholder shown until then */
+    .logo-img {
+      height: 40px;
+      vertical-align: middle;
+      margin-left: 4px;
+      filter: none;
+    }
+
+    .logo-placeholder {
+      display: inline-block;
+      font-size: 11pt;
+      font-weight: bold;
+      color: #1A6CE8;
+      vertical-align: middle;
+    }
+
+    .header-rule {
+      border: none;
+      border-top: 1px solid #1A1A1A;
+      margin-bottom: 14px;
+    }
+
+    /* ── Candidate block ───────────────────────────────────────────────────── */
+    .candidate-name {
+      font-size: 24pt;
+      font-weight: bold;
+      color: #1A1A1A;
+      line-height: 1.1;
+      margin-bottom: 3px;
+    }
+
+    .candidate-position {
+      font-size: 13pt;
+      font-weight: bold;
+      color: #1A6CE8;
+      margin-bottom: 20px;
+    }
+
+    /* ── Two-column section rows ───────────────────────────────────────────── */
+    .section {
+      display: table;
+      width: 100%;
+      margin-bottom: 18px;
+      page-break-inside: avoid;
+    }
+
+    .label-col {
+      display: table-cell;
+      width: 21%;
+      vertical-align: top;
+      padding-right: 14px;
+      padding-top: 10px;   /* align label baseline with content after top rule */
+    }
+
+    .label-text {
+      font-size: 11pt;
+      font-weight: bold;
+      color: #1A6CE8;
+    }
+
+    .content-col {
+      display: table-cell;
+      width: 79%;
+      vertical-align: top;
+      border-top: 1px solid #CCCCCC;
+      padding-top: 8px;
+    }
+
+    /* ── Availability ──────────────────────────────────────────────────────── */
+    .availability-text {
+      font-size: 10pt;
+      font-weight: bold;
+    }
+
+    /* ── Summary ───────────────────────────────────────────────────────────── */
+    .summary-text {
+      font-size: 10pt;
+      text-align: justify;
+    }
+
+    /* ── Experience ────────────────────────────────────────────────────────── */
+    .exp-item {
+      margin-bottom: 14px;
+    }
+
+    .exp-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .exp-company {
+      font-size: 10.5pt;
+      font-weight: bold;
+      color: #1A1A1A;
+      margin-bottom: 0;
+    }
+
+    .exp-title {
+      font-size: 10pt;
+      font-weight: bold;
+      color: #1A1A1A;
+      margin-bottom: 0;
+    }
+
+    .exp-period {
+      font-size: 10pt;
+      font-style: italic;
+      color: #333333;
+      margin-bottom: 6px;
+    }
+
+    .exp-summary {
+      font-size: 10pt;
+      margin-bottom: 4px;
+      text-align: justify;
+    }
+
+    .bullet-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .bullet-list li {
+      padding-left: 14px;
+      position: relative;
+      margin-bottom: 2px;
+      font-size: 10pt;
+    }
+
+    .bullet-list li::before {
+      content: "●";
+      position: absolute;
+      left: 0;
+      color: #1A6CE8;
+      font-size: 8pt;
+      top: 2px;
+    }
+
+    /* ── Education ─────────────────────────────────────────────────────────── */
+    .edu-item {
+      margin-bottom: 8px;
+    }
+
+    .edu-degree {
+      font-size: 10pt;
+      font-weight: bold;
+    }
+
+    .edu-meta {
+      font-size: 10pt;
+      font-style: italic;
+      color: #333333;
+    }
+
+    /* ── Certifications ────────────────────────────────────────────────────── */
+    /* reuses .bullet-list */
+
+    /* ── Skills ────────────────────────────────────────────────────────────── */
+    .skills-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .skill-category {
+      padding-left: 14px;
+      position: relative;
+      margin-bottom: 3px;
+    }
+
+    .skill-category::before {
+      content: "●";
+      position: absolute;
+      left: 0;
+      color: #1A6CE8;
+      font-size: 8pt;
+      top: 2px;
+    }
+
+    .skill-category-name {
+      font-weight: bold;
+      font-size: 10pt;
+    }
+
+    .skill-items {
+      list-style: none;
+      padding: 0;
+      margin: 2px 0 4px 10px;
+    }
+
+    .skill-items li {
+      padding-left: 16px;
+      position: relative;
+      font-size: 10pt;
+      margin-bottom: 1px;
+    }
+
+    .skill-items li::before {
+      content: "○";
+      position: absolute;
+      left: 0;
+      color: #555555;
+      font-size: 8pt;
+      top: 2px;
+    }
+
+    /* ── Languages ─────────────────────────────────────────────────────────── */
+    /* reuses .bullet-list */
+
+    /* ── Footer ────────────────────────────────────────────────────────────── */
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-top: 1px solid #1A1A1A;
+      padding-top: 4px;
+      display: table;
+      width: 100%;
+    }
+
+    .footer-left {
+      display: table-cell;
+      font-size: 8.5pt;
+      color: #1A6CE8;
+      text-decoration: underline;
+    }
+
+    .footer-right {
+      display: table-cell;
+      text-align: right;
+      font-size: 8.5pt;
+      color: #1A1A1A;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── TOP BAR ──────────────────────────────────────────────────────────── -->
+  <div class="top-bar">
+    {% if logo_path %}
+      <img src="{{ logo_path }}" class="logo-img" alt="AssureSoft">
+    {% else %}
+      <span class="logo-placeholder">&#x276F;assuresoft</span>
+    {% endif %}
+  </div>
+  <hr class="header-rule">
+
+  <!-- ── CANDIDATE INFO ───────────────────────────────────────────────────── -->
+  <div class="candidate-name">{{ candidate_name }}</div>
+  <div class="candidate-position">{{ position }}</div>
+
+  <!-- ── AVAILABILITY ─────────────────────────────────────────────────────── -->
+  <div class="section">
+    <div class="label-col"><span class="label-text">Availability</span></div>
+    <div class="content-col">
+      <p class="availability-text">{{ availability }}</p>
+    </div>
+  </div>
+
+  <!-- ── SUMMARY ──────────────────────────────────────────────────────────── -->
+  <div class="section">
+    <div class="label-col"><span class="label-text">Summary</span></div>
+    <div class="content-col">
+      <p class="summary-text">{{ summary }}</p>
+    </div>
+  </div>
+
+  <!-- ── EXPERIENCE ───────────────────────────────────────────────────────── -->
+  {% if experience %}
+  <div class="section">
+    <div class="label-col"><span class="label-text">Experience</span></div>
+    <div class="content-col">
+      {% for exp in experience %}
+      <div class="exp-item">
+        <div class="exp-company">{{ exp.company }}</div>
+        {% if exp.position %}<div class="exp-title">{{ exp.position }}</div>{% endif %}
+        <div class="exp-period">{{ exp.period }}</div>
+        {% if exp.summary %}<p class="exp-summary">{{ exp.summary }}</p>{% endif %}
+        {% if exp.achievements %}
+        <ul class="bullet-list">
+          {% for item in exp.achievements %}<li>{{ item }}</li>{% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- ── EDUCATION ────────────────────────────────────────────────────────── -->
+  {% if education %}
+  <div class="section">
+    <div class="label-col"><span class="label-text">Education</span></div>
+    <div class="content-col">
+      {% for edu in education %}
+      <div class="edu-item">
+        <div class="edu-degree">{{ edu.degree }}</div>
+        <div class="edu-meta">{{ edu.location }}&nbsp;|&nbsp;{{ edu.year }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- ── CERTIFICATIONS ───────────────────────────────────────────────────── -->
+  {% if certifications %}
+  <div class="section">
+    <div class="label-col"><span class="label-text">Certifications</span></div>
+    <div class="content-col">
+      <ul class="bullet-list">
+        {% for cert in certifications %}
+        <li>{{ cert.name }}, {{ cert.institution }} ({{ cert.year }})</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- ── SKILLS ───────────────────────────────────────────────────────────── -->
+  {% if skills %}
+  <div class="section">
+    <div class="label-col"><span class="label-text">Skills</span></div>
+    <div class="content-col">
+      <ul class="skills-list">
+        {% for category in skills %}
+        <li class="skill-category">
+          <span class="skill-category-name">{{ category.area }}:</span>
+          {% if category.items %}
+          <ul class="skill-items">
+            {% for item in category.items %}<li>{{ item }}</li>{% endfor %}
+          </ul>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- ── LANGUAGES ────────────────────────────────────────────────────────── -->
+  {% if languages %}
+  <div class="section">
+    <div class="label-col"><span class="label-text">Languages</span></div>
+    <div class="content-col">
+      <ul class="bullet-list">
+        {% for lang in languages %}
+        <li>{{ lang.name }} - {{ lang.level }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- ── FOOTER ───────────────────────────────────────────────────────────── -->
+  <div class="footer">
+    <span class="footer-left">www.assuresoft.com</span>
+    <span class="footer-right"></span>
+  </div>
+
+</body>
+</html>

@@ -24,6 +24,7 @@ COPY --from=deps /usr/local/bin /usr/local/bin
 
 # Copy application source
 COPY app/ ./app/
+COPY templates/ ./templates/
 COPY run.py .
 
 # Own everything as the app user

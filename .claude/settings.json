@@ -3,7 +3,9 @@
     "allow": [
       "WebSearch",
       "Bash(.venv/Scripts/pip install *)",
-      "Bash(.venv/Scripts/python -c \"import pdfplumber; import docx; print\\('OK'\\)\")"
+      "Bash(.venv/Scripts/python -c \"import pdfplumber; import docx; print\\('OK'\\)\")",
+      "Bash(.venv/Scripts/python -c \"from app.services.document_generation import generate_docx; print\\('import OK'\\)\")",
+      "Bash(.venv/Scripts/python -c ' *)"
     ]
   }
 }

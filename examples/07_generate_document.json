@@ -1,0 +1,94 @@
+{
+  "candidateName": "Juan Perez",
+  "position": "Senior Full Stack Software Engineer",
+  "availability": "Three days after confirmation",
+  "summary": "Senior Software Engineer with 10+ years of experience designing, building, and operating scalable web applications and enterprise systems. Proven track record delivering high-quality solutions using modern JavaScript frameworks and Python backends. Strong collaborator with cross-functional teams, adept at translating complex business requirements into clean, maintainable code. Experienced in cloud-native architectures on AWS and GCP, CI/CD pipelines, and leading small engineering teams through full product lifecycles.",
+  "experience": [
+    {
+      "company": "Acme Corp",
+      "position": "Senior Software Engineer",
+      "period": "2020 – Present",
+      "summary": "Lead engineer on the customer-facing portal serving 500k+ monthly active users. Spearheaded migration from monolith to microservices, reducing deployment time by 60%.",
+      "achievements": [
+        "Architected and delivered a real-time notifications system using WebSockets and Redis Pub/Sub, reducing support tickets by 35%.",
+        "Led a team of 4 engineers through a full rewrite of the checkout flow, increasing conversion rate by 12%.",
+        "Introduced automated integration testing with 85% coverage, cutting production incidents in half."
+      ]
+    },
+    {
+      "company": "TechStart Solutions",
+      "position": "Full Stack Developer",
+      "period": "2016 – 2020",
+      "summary": "Core member of a 6-person engineering team building a SaaS platform for HR analytics. Owned the frontend from scratch and contributed heavily to the Python REST API.",
+      "achievements": [
+        "Built a configurable dashboard builder using React and D3.js adopted by 200+ enterprise clients.",
+        "Designed and implemented a multi-tenant data isolation model in PostgreSQL.",
+        "Reduced average API response time from 800ms to 120ms through query optimisation and caching."
+      ]
+    },
+    {
+      "company": "Earlier Experience",
+      "period": "2013 – 2016",
+      "summary": "Held junior and mid-level engineering roles at two early-stage startups, contributing to product development across full stack web applications, internal tooling, and third-party integrations."
+    }
+  ],
+  "education": [
+    {
+      "degree": "B.Sc. Computer Science",
+      "location": "Universidad Nacional, Argentina",
+      "year": "2013"
+    },
+    {
+      "degree": "Full Stack Web Development Bootcamp",
+      "location": "Platzi — Online",
+      "year": "2015"
+    }
+  ],
+  "skills": [
+    {
+      "area": "Programming Languages",
+      "items": ["Python", "JavaScript", "TypeScript", "SQL"]
+    },
+    {
+      "area": "Frameworks & Libraries",
+      "items": ["FastAPI", "React", "Node.js", "Django"]
+    },
+    {
+      "area": "Cloud & DevOps",
+      "items": ["AWS (EC2, S3, RDS, Lambda)", "Docker", "GitHub Actions"]
+    },
+    {
+      "area": "Databases",
+      "items": ["PostgreSQL", "Redis", "Databricks SQL"]
+    }
+  ],
+  "certifications": [
+    {
+      "name": "AWS Certified Solutions Architect – Associate",
+      "institution": "Amazon Web Services",
+      "year": "2022"
+    },
+    {
+      "name": "Professional Scrum Master I (PSM I)",
+      "institution": "Scrum.org",
+      "year": "2021"
+    }
+  ],
+  "languages": [
+    {
+      "name": "English",
+      "level": "Advanced",
+      "availableLevels": ["Basic", "Intermediate", "Advanced"]
+    },
+    {
+      "name": "Spanish",
+      "level": "Advanced",
+      "availableLevels": ["Basic", "Intermediate", "Advanced"]
+    },
+    {
+      "name": "Portuguese",
+      "level": "Intermediate",
+      "availableLevels": ["Basic", "Intermediate", "Advanced"]
+    }
+  ]
+}

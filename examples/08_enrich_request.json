@@ -1,0 +1,69 @@
+{
+  "jobDescription": {
+    "id": "jd-senior-python-001",
+    "title": "Senior Python Developer",
+    "requirements": [
+      "5+ years of Python experience",
+      "FastAPI or Django REST Framework",
+      "PostgreSQL or another relational database",
+      "REST API design and best practices",
+      "Experience with cloud platforms (AWS, GCP or Azure)"
+    ],
+    "responsibilities": [
+      "Design and build scalable microservices",
+      "Collaborate with data engineers on Databricks pipelines",
+      "Conduct code reviews and mentor junior developers",
+      "Write technical documentation and API specs"
+    ],
+    "niceToHave": [
+      "Docker and Kubernetes",
+      "Apache Spark or Databricks",
+      "CI/CD pipelines (GitHub Actions, Jenkins)",
+      "Experience with event-driven architectures"
+    ]
+  },
+  "greenhouseParseData": {
+    "candidateId": "53883394",
+    "firstName": "Juan",
+    "lastName": "Perez",
+    "email": "juan.perez@example.com",
+    "phone": "+591-700-12345",
+    "currentTitle": "Software Developer",
+    "currentCompany": "TechCorp Inc.",
+    "education": [
+      {
+        "degree": "B.Sc. Computer Science",
+        "field": "Computer Science",
+        "institution": "Universidad Nacional, Argentina",
+        "graduationYear": 2015
+      }
+    ],
+    "employmentHistory": [
+      {
+        "company": "TechCorp Inc.",
+        "title": "Software Developer",
+        "startDate": "2020-03",
+        "endDate": null,
+        "current": true,
+        "description": "Developed REST APIs using FastAPI and PostgreSQL. Led migration of legacy services to microservices architecture. Mentored two junior engineers."
+      },
+      {
+        "company": "StartupXYZ",
+        "title": "Junior Python Developer",
+        "startDate": "2016-06",
+        "endDate": "2020-02",
+        "current": false,
+        "description": "Built data processing scripts in Python. Maintained Django web application serving 10k daily users."
+      }
+    ]
+  },
+  "jsonCvTextExtracted": {
+    "rawText": "Juan Perez — Software Developer\n\nExperience:\nTechCorp Inc. (2020–present): Developed REST APIs with FastAPI and PostgreSQL. Led microservices migration. Mentored junior engineers.\nStartupXYZ (2016–2020): Python scripting, Django maintenance, 10k daily users.\n\nEducation:\nB.Sc. Computer Science — Universidad Nacional, Argentina (2015)\n\nSkills: Python, FastAPI, PostgreSQL, Docker, Git, Django, Redis\nCertifications: AWS Solutions Architect Associate\nLanguages: Spanish (native), English (advanced)",
+    "structured": {
+      "skills": ["Python", "FastAPI", "PostgreSQL", "Docker", "Git", "Django", "Redis"],
+      "certifications": ["AWS Solutions Architect Associate"],
+      "languages": ["Spanish", "English"]
+    }
+  },
+  "documentType": 1
+}
