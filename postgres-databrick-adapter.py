@@ -4,7 +4,6 @@ Databricks database adapter implementation
 
 import os
 from typing import List, Dict, Any, Optional
-from databricks import sql
 from app.models.adapters.base_adapter import BaseDatabaseAdapter
 import psycopg2
 import psycopg2.extras
@@ -33,17 +32,16 @@ class PostgresDatabaseAdapter(BaseDatabaseAdapter):
             # Generate OAuth token for database connection (1-hour expiration)
             credential = w.postgres.generate_database_credential(
                 endpoint="projects/recruitment/branches/production/endpoints/primary"
-                )
-        
+            )
+
         elif environment == "development":
             instance_name = os.getenv(
-            "DATABRICKS_POSTGRES_INSTANCE_NAME", "recruitment-ai-web-data"
+                "DATABRICKS_POSTGRES_INSTANCE_NAME", "recruitment-ai-web-data"
             )
 
             credential = w.database.generate_database_credential(
-            request_id=str(uuid.uuid4()), instance_names=[instance_name]
+                request_id=str(uuid.uuid4()), instance_names=[instance_name]
             )
-        
 
         self._dsn = {
             "host": host or os.getenv("DATABRICKS_POSTGRES_HOST"),

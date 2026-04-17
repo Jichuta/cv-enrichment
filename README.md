@@ -58,6 +58,41 @@ Once running, the following URLs are available locally:
 | http://localhost:8000/redoc | ReDoc |
 | http://localhost:8000/api/v1/health | Health check (no auth required) |
 
+## Development
+
+### Code Quality
+
+The project uses [Ruff](https://docs.astral.sh/ruff/) for linting and formatting, and [mypy](https://mypy.readthedocs.io/) for type checking.
+
+Run all checks manually:
+
+```bash
+ruff format app/     # auto-format (run this after writing new code)
+ruff check app/      # lint
+mypy app/            # type-check
+```
+
+### Pre-commit Hook
+
+A pre-commit hook runs `ruff` lint and `ruff format` automatically on every `git commit`, blocking commits that would fail CI.
+
+Install it once after cloning:
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+After that, every commit is checked automatically. To run it manually across all files:
+
+```bash
+pre-commit run --all-files
+```
+
+### VS Code — Format on Save
+
+Install the [Ruff extension](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff) (`charliermarsh.ruff`). The `.vscode/settings.json` file in this repo configures it to auto-format, auto-fix lint issues, and organize imports on every save.
+
 ## Quick Overview
 
 | Component | Technology |
